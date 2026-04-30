@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Thai Quiz - Small Talk</title>
+
+<style>
+body {
+  font-family: Arial, sans-serif;
+  max-width: 800px;
+  margin: auto;
+  padding: 20px;
+}
+
+.question-box {
+  border: 1px solid #ddd;
+  padding: 20px;
+  margin-top: 20px;
+  border-radius: 10px;
+}
+
+.thai {
+  font-size: 22px;
+  font-weight: bold;
+}
+
+.phonetic {
+  color: #555;
+  margin-bottom: 10px;
+}
+
+.option {
+  display: block;
+  margin: 8px 0;
+  padding: 10px;
+  border: 1px solid #ccc;
+  cursor: pointer;
+  border-radius: 6px;
+}
+
+.option:hover {
+  background: #f0f0f0;
+}
+
+#feedback {
+  margin-top: 15px;
+  font-weight: bold;
+}
+
+button {
+  margin-top: 10px;
+  padding: 10px 15px;
+}
+</style>
+</head>
+
+<body>
+
+<h2>Thai Quiz: Small Talk Learn Thai</h2>
+
+<div id="quiz" class="question-box"></div>
+
+<div id="feedback"></div>
+
+<script>
+const quiz = [
+{
+q: "คุณ เรียน ภาษาไทย ไหม",
+p: "kun rian paa-sǎa Thai mái?",
+options: ["Do you learn Thai?", "Do you teach Thai?", "Do you forget Thai?", "Do you translate Thai?"],
+answer: 0
+},
+{
+q: "คุณ พูด ภาษาไทย ได้ ไหม",
+p: "kun pôod paa-sǎa Thai dâi mái?",
+options: ["Can you understand Thai?", "Can you speak Thai?", "Can you read Thai?", "Can you write Thai?"],
+answer: 1
+},
+{
+q: "คุณ ฟัง ภาษาไทย เข้าใจ ไหม",
+p: "kun fang paa-sǎa Thai kâo-jai mái?",
+options: ["Do you write Thai well?", "Do you understand spoken Thai?", "Do you speak Thai fast?", "Do you read Thai easily?"],
+answer: 1
+},
+{
+q: "คุณ อ่าน ภาษาไทย ได้ ไหม",
+p: "kun àan paa-sǎa Thai dâi mái?",
+options: ["Can you read Thai?", "Can you write Thai?", "Can you speak Thai?", "Can you listen Thai?"],
+answer: 0
+},
+{
+q: "คุณ เขียน ภาษาไทย ได้ ไหม",
+p: "kun kǐan paa-sǎa Thai dâi mái?",
+options: ["Can you speak Thai?", "Can you read Thai?", "Can you write Thai?", "Can you hear Thai?"],
+answer: 2
+},
+{
+q: "ภาษาไทย ยาก ไหม",
+p: "paa-sǎa Thai yâag mái?",
+options: ["Is Thai easy?", "Is Thai useful?", "Is Thai difficult?", "Is Thai popular?"],
+answer: 2
+},
+{
+q: "ภาษาไทย ง่าย ไหม",
+p: "paa-sǎa Thai ngâay mái?",
+options: ["Is Thai difficult?", "Is Thai boring?", "Is Thai long?", "Is Thai easy?"],
+answer: 3
+},
+{
+q: "คุณ ชอบ ภาษาไทย ไหม",
+p: "kun chôrb paa-sǎa Thai mái?",
+options: ["Do you need Thai?", "Do you forget Thai?", "Do you like Thai language?", "Do you teach Thai?"],
+answer: 2
+},
+{
+q: "คุณ เรียน ภาษาไทย ทุกวัน ไหม",
+p: "kun rian paa-sǎa Thai túg wan mái?",
+options: ["Do you study Thai every day?", "Do you write Thai every day?", "Do you forget Thai every day?", "Do you teach Thai every day?"],
+answer: 0
+},
+{
+q: "คุณ ฝึก พูด ภาษาไทย ไหม",
+p: "kun fèug pôod paa-sǎa Thai mái?",
+options: ["Do you practice listening Thai?", "Do you practice speaking Thai?", "Do you practice writing Thai?", "Do you practice reading Thai?"],
+answer: 1
+},
+{
+q: "คุณ ฝึก ฟัง ภาษาไทย ยังไง",
+p: "kun fèug fang paa-sǎa Thai yang-ngai?",
+options: ["When do you learn Thai?", "How do you practice Thai listening?", "Where do you study Thai?", "Why do you learn Thai?"],
+answer: 1
+},
+{
+q: "คุณ ใช้วิธี ไหน จำ คำศัพท์ ภาษาไทย",
+p: "kun chái wí-tee nǎi jam kam-sàb paa-sǎa Thai?",
+options: ["Which teacher do you like?", "Which book do you read?", "Which method do you use to remember Thai vocabulary?", "Which language do you speak?"],
+answer: 2
+},
+{
+q: "คุณ ใช้ ภาษาไทย ใน ชีวิตประจำวัน ไหม",
+p: "kun chái paa-sǎa Thai nai chee-wíd bprà-jam-wan mái?",
+options: ["Do you use Thai in daily life?", "Do you read Thai at night?", "Do you teach Thai at school?", "Do you forget Thai at home?"],
+answer: 0
+},
+{
+q: "คุณ คุย กับ คนไทย ทุกวัน ไหม",
+p: "kun kuy gàb kon Thai túg wan mái?",
+options: ["Do you listen Thai every day?", "Do you talk with Thai people every day?", "Do you write Thai every day?", "Do you read Thai every day?"],
+answer: 1
+},
+{
+q: "คุณ อยาก เก่ง ภาษาไทย ไหม",
+p: "kun yàag gèng paa-sǎa Thai mái?",
+options: ["Do you want to speak Thai?", "Do you want to be good at Thai?", "Do you want to be fluent in Thai?", "Do you want to speak Thai fast?"],
+answer: 1
+}
+];
+
+let current = 0;
+let score = 0;
+
+function loadQuestion() {
+  const q = quiz[current];
+  const box = document.getElementById("quiz");
+
+  box.innerHTML = `
+    <div class="thai">${q.q}</div>
+    <div class="phonetic">${q.p}</div>
+    <div>
+      ${q.options.map((opt, i) => 
+        `<div class="option" onclick="checkAnswer(${i})">${String.fromCharCode(3585 + i)}) ${opt}</div>`
+      ).join("")}
+    </div>
+  `;
+}
+
+function checkAnswer(i) {
+  const feedback = document.getElementById("feedback");
+
+  if (i === quiz[current].answer) {
+    feedback.innerHTML = "✅ Correct!";
+    score++;
+  } else {
+    feedback.innerHTML = "❌ Wrong!";
+  }
+
+  setTimeout(() => {
+    current++;
+    feedback.innerHTML = "";
+
+    if (current < quiz.length) {
+      loadQuestion();
+    } else {
+      document.getElementById("quiz").innerHTML =
+        `<h3>Quiz Finished</h3><p>Your score: ${score} / ${quiz.length}</p>`;
+    }
+  }, 800);
+}
+
+loadQuestion();
+</script>
+
+</body>
+</html>
